@@ -1,13 +1,15 @@
 package golang
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
-func Send() {
+func Send(teste Teste) {
 
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost"})
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "192.168.1.38"})
 	if err != nil {
 		panic(err)
 	}
@@ -30,13 +32,22 @@ func Send() {
 
 	// Produce messages to topic (asynchronously)
 	topic := "teste_go_topic"
-	for _, word := range []string{"Welcome", "to", "the", "Confluent", "Kafka", "Golang", "client"} {
+
+	reqBodyBytes := new(bytes.Buffer)
+	json.NewEncoder(reqBodyBytes).Encode(teste)
+
+	 // this is the []b
 		p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			Value:          []byte(word),
+			Value:          reqBodyBytes.Bytes(),
 		}, nil)
-	}
+
 
 	// Wait for message deliveries before shutting down
 	p.Flush(15 * 1000)
+}
+
+type Teste struct{
+	Nome string
+	Idade int8
 }

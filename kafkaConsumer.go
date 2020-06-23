@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
-func lerMensagem() {
+func LerMensagem() {
 
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost",
