@@ -48,5 +48,5 @@ func Send(teste *Teste) {
 
 type Teste struct {
 	Nome  string
-	Idade int8
+	Idade int64
 }
